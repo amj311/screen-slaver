@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css?family=Press+Start+2P&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css" type="text/css">
+</head>
+
+<body>
+    <div id="game" :class="gameState || 'loading'">
+        <div>
+            <div>
+                <div id="simon_space">
+                    <div id="simon">
+                        <div id="simon_height"></div>
+                        <div id="screen" :class="{showColor: showSimonColor}" :style="{backgroundColor: simonColor, color: simonColor, backgroundImage: `url(${screenBgURL})`}"></div>
+                        <img src="images/738035_old-television-png.png" draggable="false">
+                        <div id="screen_text" class="screen-vp">
+                            <div id="msg_screen">
+                                <div id="simon_msg">{{simonMessage}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="ui_main">
+                    
+                    <div id="backToMenu" @click="abortToMenu" v-show="gameState != 'menu'" class="button" :style="{backgroundColor: uiColors.back, color: uiColors.back}"><div>Exit</div></div>
+                    
+                    <div v-show="gameState === 'menu'" id="menu" :class="{buttonContainer: true, menuView: true}">
+                        <div @click="startGame" class="button" :style="{backgroundColor: uiColors.play, color: uiColors.play}">
+                            <div>Play</div>
+                        </div>
+                        <div class="button" @click="openScores" :style="{backgroundColor: uiColors.scores, color: uiColors.scores}">
+                            <div>Highscores</div>
+                        </div>
+                        <a href="https://github.com/amj311/highscores" style="color: #fff; margin-top: 2em;">See it on Github!</a>
+                    </div>
+                    
+                    
+                    <div v-show="gameState === 'scores'" id="scoreBoard" :class="{menuView: true}">
+                        <div id="highscores">
+                            <h2 class="header">Worldwide</h2>
+                            <div v-for="score in highScores" :class="{scoreRow: true, isUser: score.username && score.username === username}" :style="{color: uiColors.scores}">
+                                <div class="rank">{{score.rank}}</div>
+                                <div class="name">{{score.username || "no name"}}</div>
+                                <div class="spacer"></div>
+                                <div class="score">{{score.score}}</div>
+                            </div>
+                        </div>
+                        
+                        <div id="userscores">
+                            
+                            <div @click="logout" id="logout" v-if="username.length > 0"></div>
+                            
+                            <div v-if="username.length <= 0" class="buttonContainer">
+                                <br><br>
+                                <h2>Enter your username to see your scores!</h2>
+                                
+                                <form @submit.prevent="getHighScores">
+                                    <input type="text" v-model="nameQuery" placeholder="Username" />
+                                    <input type="submit" value="Submit" :disabled="!nameIsGood" class="button inline" :style="{backgroundColor: uiColors.submit, color: uiColors.submit}" />
+                                </form>
+                                
+                            </div>
+                            
+                            <h2 v-else class="header">Scores for {{username}}</h2>
+                            
+                            <div v-for="score in userScores" class="scoreRow">
+                                <div class="rank">{{score.rank}}</div>
+                                <div class="name">{{score.username || "no name"}}</div>
+                                <div class="spacer"></div>
+                                <div class="score">{{score.score}}</div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    
+                    
+                    <div v-show="gameState === 'playing'" id="userConsole" :class="{playerTurn: playerTurn, buttonContainer: true, menuView: true}">
+                        <div v-for="color in playingColors" @click="onUserAttempt(color)" :id="color" class="button" :style="{backgroundColor: allColors[color], color: allColors[color]}"></div>
+                    </div>
+                    
+                    
+                    <div v-show="gameState === 'lost'" id="gameOver" :class="{menuView: true}">
+                        <h2>Final Score:</h2>
+                        <h1>{{currentScore}}</h1>
+                        <div class="buttonContainer">
+                            
+                            <form @submit.prevent="sendScore">
+                                <input type="text" v-model="nameQuery" placeholder="Username" />
+                                <input type="submit" value="Submit" :disabled="!nameIsGood" class="button" :style="{backgroundColor: uiColors.submit, color: uiColors.submit}" />
+                            </form>
+                            
+                            <div class="button" @click="startGame" :style="{backgroundColor: uiColors.play, color: uiColors.play}">
+                                <div>Try Again</div>
+                            </div>
+                            <div class="button" @click="openScores" :style="{backgroundColor: uiColors.scores, color: uiColors.scores}">
+                                <div>Highscores</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script type="text/javascript" src="simon.js"></script>
+</body>
+
+</html>
