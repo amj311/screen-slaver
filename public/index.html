@@ -82,6 +82,7 @@
                     
                     <div v-show="gameState === 'playing'" id="userConsole" :class="{playerTurn: playerTurn, buttonContainer: true, menuView: true}">
                         <div v-for="color in playingColors" @click="onUserAttempt(color)" :id="color" class="button" :style="{backgroundColor: allColors[color], color: allColors[color]}"></div>
+                        <div v-show="!userTurn" id="instructions">Watch the screen and repeat the sequence!</div>
                     </div>
                     
                     
