@@ -1,7 +1,6 @@
 <img src="./public/images/tv-logo.gif" />
 
 <br>
-<br>
 
 # Screen Slaver
 
