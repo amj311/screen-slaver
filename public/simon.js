@@ -10,7 +10,7 @@ var game = new Vue ({
     el: '#game',
     
     data: {
-        apiUrl: "https://great-amazing-replace.glitch.me",
+        apiUrl: "https://fine-island-falcon.glitch.me",
         gameName: "Screen Slaver",
         GAME_STATES: ["loading","login","menu","playing","lost","scores"],
         gameState: "loading",
