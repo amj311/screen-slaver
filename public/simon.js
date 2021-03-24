@@ -190,6 +190,7 @@ var game = new Vue ({
                 console.log('good job!')
                 
                 if (atmptIdx === this.simonSeq.length - 1) {
+                    this.simonMessage = "Good job!"
                     console.log('round complete')
                     this.currentScore += this.scoreInc;
                     setTimeout(function() { game.startNextRound()}, 2000);
