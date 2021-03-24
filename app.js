@@ -10,8 +10,15 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
 var app = express();
-app.use(cors())
-app.options('*', cors())
+app.use(cors({
+  'allowedHeaders': ['Content-Type', 'API-Key', 'API-Secret', 'Access-Control-Allow-Headers', 'accept', 'client-security-token', 'x-github-event'],
+  'exposedHeaders': ['sessionId'],
+  'origin': '*',
+  'methods': 'GET, HEAD, PUT, PATCH, POST, DELETE, OPTIONS',
+  'preflightContinue': false,
+  'credentials': true
+}));
+app.options('*', function (req,res) { res.sendStatus(200); });
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -65,7 +72,5 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+
 module.exports = app;
-
-
-console.log('called app.js')
