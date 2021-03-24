@@ -17,6 +17,7 @@ var game = new Vue ({
         username: '',
         nameQuery: '',
         currentScore: 0,
+        scoreInc: 25,
         userScores: [],
         highScores: [],
         maxScores: 25,
@@ -108,14 +109,23 @@ var game = new Vue ({
         },
         
         startGame(){
+            this.currentScore = 0;
             this.gameState = this.GAME_STATES[3]
             this.playerTurn = false;
             this.simonSeq = []
-            this.round = 1;
+            this.round = 0;
             
-            this.doSimonTurn()
+            this.startNextRound()
         },
         
+        startNextRound() {
+            this.showSimonColor = false;
+            game.playerTurn = false;
+            game.round++
+            game.simonMessage = "Round "+game.round;
+            setTimeout(function() { game.doSimonTurn() }, 2000);
+        },
+
         doSimonTurn(){
             this.playerTurn = false;
             this.simonSeq.push(this.randomFrom(this.playingColors))
@@ -181,9 +191,8 @@ var game = new Vue ({
                 
                 if (atmptIdx === this.simonSeq.length - 1) {
                     console.log('round complete')
-                    this.playerTurn = false;
-                    this.round++
-                    setTimeout(function() { game.doSimonTurn() }, 2000);
+                    this.currentScore += this.scoreInc;
+                    setTimeout(function() { game.startNextRound()}, 2000);
                 }
             }
             else {
@@ -196,6 +205,13 @@ var game = new Vue ({
             console.log('GAME OVER!')
             this.playerTurn = false;
             this.gameState = this.GAME_STATES[4]
+            if (this.currentScore > this.getPersonalBest()) {
+                this.$nextTick(function() {
+                    this.simonMessage = "HIGH SCORE!"
+                    console.log("high score")
+                })
+            }
+            this.savePersonalBest(this.currentScore);
         },
         
         async sendScore() {
@@ -206,6 +222,13 @@ var game = new Vue ({
                 score: game.currentScore
             })
             game.openScores()
+        },
+
+        getPersonalBest() {
+            return localStorage.getItem("simon-best") || 0;
+        },
+        savePersonalBest(score) {
+            if (score > this.getPersonalBest()) localStorage.setItem("simon-best", score);
         },
         
         openScores(){

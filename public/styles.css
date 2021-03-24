@@ -86,20 +86,23 @@ div#screen_text {
     left: 15%;
     width: 55%;
     height: 50%;
-    overflow: hidden;
-}
-
-div#screen_text {
-    display: flex;
+    opacity: .9;
+    text-shadow: 0 0 5px #0008;
 }
 
 div#screen_text > div {
-    display: flex;
-    width: 100%;
-    height: 100%;
+    position: absolute;
+}
+
+div#hiscore_msg {
+    right: 0;
+    opacity: .7;
 }
 
 div#msg_screen {
+    display: flex;
+    width: 100%;
+    height: 100%;
     justify-content: center;
     align-items: center;
 }
@@ -108,7 +111,6 @@ div#simon_msg {
     text-align: center;
     max-width: min-content;
     font-size: 1.7em;
-    opacity: .9;
 }
 
 div#simon_height {
@@ -169,6 +171,7 @@ div.menuView {
     align-items: center;
     justify-content: center;
     user-select: none;
+    text-shadow: 1px 1px 5px #0008;
 }
 .button.inline {
     width: auto;

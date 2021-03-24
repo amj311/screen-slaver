@@ -17,6 +17,9 @@
                         <div id="screen" :class="{showColor: showSimonColor}" :style="{backgroundColor: simonColor, color: simonColor, backgroundImage: `url(${screenBgURL})`}"></div>
                         <img src="images/738035_old-television-png.png" draggable="false">
                         <div id="screen_text" class="screen-vp">
+                            <div id="score_msg" v-show="gameState === 'playing'">{{currentScore}}</div>
+                            <div id="hiscore_msg" v-show="gameState === 'playing'">HI {{Math.max(getPersonalBest(), currentScore)}}</div>
+
                             <div id="msg_screen">
                                 <div id="simon_msg">{{simonMessage}}</div>
                             </div>
@@ -34,7 +37,7 @@
                         <div class="button" @click="openScores" :style="{backgroundColor: uiColors.scores, color: uiColors.scores}">
                             <div>Highscores</div>
                         </div>
-                        <a href="https://github.com/amj311/highscores" style="color: #fff; margin-top: 2em;">See it on Github!</a>
+                        <a href="https://github.com/amj311/screen-slaver" style="color: #fff; margin-top: 2em;">See it on Github!</a>
                     </div>
                     
                     

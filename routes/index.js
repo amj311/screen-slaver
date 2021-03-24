@@ -15,6 +15,10 @@ app.get('/scores', (req,res) => {
     res.send(highscores.slice(0,max))
 })
 
+app.get('/scores/hi', (req,res) => {
+    res.json(highscores[0])
+})
+
 app.get('/scores/:username', (req,res) => {
     let userScores = highscores.filter(score => {return score.username === req.params.username})
     console.log(req.params.username, userScores)
