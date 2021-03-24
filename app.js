@@ -6,6 +6,9 @@ var logger = require('morgan');
 var cors = require('cors');
 const cmd = require("node-cmd");
 
+const env = require("./env.json");
+console.log(env);
+
 var indexRouter = require('./routes/index');
 
 var app = express();

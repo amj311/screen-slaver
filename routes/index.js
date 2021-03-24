@@ -7,64 +7,131 @@ app.use(bodyParser.urlencoded({
 }))
 app.use(bodyParser.json())
 
-var highscores = require("highscores.json") || [];
+
+
+const MongoClient = require('mongodb').MongoClient
+var ObjectID = require('mongodb').ObjectID;
+
+let db;
+let Scores;
+// connect to the database
+MongoClient.connect('mongodb+srv://amj311:be13strong51@cluster0-u6luc.mongodb.net/screenslaver', { useNewUrlParser: true, useUnifiedTopology: true }, (err, client) => {
+    if (err) return console.error(err)
+    console.log('Connected to Database')
+    db = client.db("screenslaver");
+    Scores = db.collection("scores");
+});
+
+
 
 
 app.get('/scores', (req, res) => {
     let max = parseInt(req.query.max)
-    res.send(highscores.slice(0, max))
+    Scores.find({}).toArray(function (err, list) {
+        if (!err) {
+            res.status(200);
+            list.sort( (a,b)=>a.rank-b.rank)
+            res.send(list.slice(0, max))
+        }
+        else {
+            console.log(err)
+            res.status(500);
+            res.json({ ok: false });
+        }
+    });
 })
 
 app.get('/scores/:username', (req, res) => {
-    let userScores = highscores.filter(score => { return score.username === req.params.username })
-    console.log(req.params.username, userScores)
-    res.send(userScores)
+    let username = req.params.username;
+    Scores.find({username}).toArray(function (err, list) {
+        if (!err) {
+            res.status(200);
+            list.sort( (a,b)=>a.rank-b.rank)
+            res.send(list)
+        }
+        else {
+            console.log(err)
+            res.status(500);
+            res.json({ ok: false });
+        }
+    });
 })
 
 
-app.post('/scores', (req, res) => {
+app.post('/scores', async (req, res) => {
+    Scores.find({}).toArray(async function (err, list) {
+        if (!err) {
+            let highscores = list;
+            highscores.sort( (a,b)=>a.rank-b.rank)
 
-    let newScore = parseInt(req.body.score);
-    let foundSpot = false;
-
-    let idx = 0;
-
-    for (; idx < highscores.length; idx++) {
-
-        if (!foundSpot && highscores[idx].score < newScore) {
-            req.body.rank = parseInt(idx) + 1;
-            highscores.splice(idx, 0, req.body)
-            foundSpot = true;
-            break;
+            let newScore = req.body;
+            let foundSpot = false;
+        
+            let idx = 0;
+        
+            for (; idx < highscores.length; idx++) {
+                if (!foundSpot && highscores[idx].score < parseInt(newScore.score)) {
+                    newScore.rank = parseInt(idx) + 1;
+                    highscores.splice(idx, 0, newScore)
+                    foundSpot = true;
+                    break;
+                }
+            }
+        
+            if (foundSpot) {
+                for (; idx < highscores.length; idx++) {
+                    highscores[idx].rank = idx + 1;
+                    await Scores.replaceOne(
+                        { "_id": new ObjectID(highscores[idx]._id) },
+                        highscores[idx]
+                      ).then(result=>{
+                        let success = result.modifiedCount >= 1;
+                        if (success) {
+                          console.log("Saved!")
+                        }
+                        else {
+                          console.log("Not saved...")
+                        }
+                      })
+                      .catch(err=>{
+                        console.log("Error:")
+                        console.log(err)
+                      });
+                }
+            }
+        
+            // is lowest score, add to end
+            if (!foundSpot) {
+                newScore.rank = highscores.length + 1;
+                highscores.push(newScore)
+            }
+        
+            await Scores.insertOne(newScore).then(result=>{
+                // console.log(result.result)
+                let success = result.insertedCount >= 1;
+                if (success) {
+                  console.log("Saved!")
+                }
+                else {
+                  console.log("Not saved...")
+                }
+              });
+        
+            Scores.aggregate(
+                [
+                  { $sort : { rank : 1 } }
+                ]
+             )
+        
+            res.send(highscores)
         }
-
-    }
-
-    if (foundSpot) {
-        console.log(idx)
-
-        for (; idx < highscores.length; idx++) {
-            highscores[idx].rank = idx + 1;
-        }
-    }
-
-    if (!foundSpot) {
-        let score = req.body;
-        score.rank = highscores.length + 1;
-        highscores.push(req.body)
-    }
-
-    fs.writeFile("highscores.json", JSON.stringify(highscores), (err) => {
-        if (err)
-            console.log(err);
         else {
-            console.log("File written successfully\n");
-            console.log("The written has the following contents:");
-            console.log(fs.readFileSync("books.txt", "utf8"));
+            console.log(err)
+            res.status(500);
+            res.json({ ok: false });
         }
     });
 
-    res.send(highscores)
 })
 
 module.exports = app;

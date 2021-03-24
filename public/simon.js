@@ -1,6 +1,8 @@
 /* global Vue */
 /* global axios */
 
+console.log(deploy);
+
 var afterPlaySeq = function(){
     game.startUserTurn()
 }
@@ -10,7 +12,7 @@ var game = new Vue ({
     el: '#game',
     
     data: {
-        apiUrl: "https://fine-island-falcon.glitch.me",
+        apiUrl: deploy?.apiUrl || "",
         gameName: "Screen Slaver",
         GAME_STATES: ["loading","login","menu","playing","lost","scores"],
         gameState: "loading",
