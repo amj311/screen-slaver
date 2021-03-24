@@ -10,6 +10,7 @@ var game = new Vue ({
     el: '#game',
     
     data: {
+        apiUrl: "https://great-amazing-replace.glitch.me",
         gameName: "Screen Slaver",
         GAME_STATES: ["loading","login","menu","playing","lost","scores"],
         gameState: "loading",
@@ -218,7 +219,7 @@ var game = new Vue ({
         async sendScore() {
             this.username = this.nameQuery;
             console.log('sending score')
-            await axios.post('/scores', {
+            await axios.post(this.apiUrl+'/scores', {
                 username: game.username,
                 score: game.currentScore
             })
@@ -239,7 +240,7 @@ var game = new Vue ({
         
         async getHighScores() {
             this.screenBgURL = this.bgURLS.error;
-            let res = await axios.get('/scores?max=' + this.maxScores)
+            let res = await axios.get(this.apiUrl+'/scores?max=' + this.maxScores)
             this.highScores = res.data;
             console.log(this.highScores)
             await this.getUserScores()
@@ -248,7 +249,7 @@ var game = new Vue ({
         
         async getUserScores(){
             this.username = this.nameQuery;
-            let res = await axios.get('/scores/' + this.username)
+            let res = await axios.get(this.apiUrl+'/scores/' + this.username)
             this.userScores = res.data;
             console.log(this.userScores)
         },
