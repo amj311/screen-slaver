@@ -88,6 +88,8 @@ div#screen_text {
     height: 50%;
     opacity: .9;
     text-shadow: 0 0 5px #0008;
+    line-height: 1.4em;
+    word-spacing: -.5em;
 }
 
 div#screen_text > div {
