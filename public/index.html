@@ -43,7 +43,10 @@
                     
                     <div v-show="gameState === 'scores'" id="scoreBoard" :class="{menuView: true}">
                         <div id="highscores">
-                            <h2 class="header">Worldwide</h2>
+                            <div class="top">
+                                <div class="header">Worldwide</div>
+                                <b class="action-icon">▶</b>
+                            </div>
                             <div v-for="score in highScores" :class="{scoreRow: true, isUser: score.username && score.username === username}" :style="{color: uiColors.scores}">
                                 <div class="rank">{{score.rank}}</div>
                                 <div class="name">{{score.username || "no name"}}</div>
@@ -67,7 +70,13 @@
                                 
                             </div>
                             
-                            <h2 v-else class="header">Scores for {{username}}</h2>
+                            <div v-else>
+                                
+                            <div class="top">
+                                <b class="action-icon">▶</b>
+                                <div class="header">Scores for {{username}}</div>
+                                <b class="action-icon">&times;</b>
+                            </div>
                             
                             <div v-for="score in userScores" class="scoreRow">
                                 <div class="rank">{{score.rank}}</div>
