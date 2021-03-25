@@ -313,7 +313,7 @@ form input[disabled] {
     cursor: not-allowed;
 }
 
-@media screen and (max-width: 400) {
+@media only screen and (max-width: 400px) {
     body {
         font-size: .8em;
     }
