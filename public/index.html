@@ -56,9 +56,6 @@
                         </div>
                         
                         <div id="userscores">
-                            
-                            <div @click="logout" id="logout" v-if="username.length > 0"></div>
-                            
                             <div v-if="username.length <= 0" class="buttonContainer">
                                 <br><br>
                                 <h2>Enter your username to see your scores!</h2>
@@ -72,7 +69,7 @@
                             <div v-else class="top">
                                 <b class="action-icon">&#9668;</b>
                                 <div class="header">Scores for {{username}}</div>
-                                <b class="action-icon">&times;</b>
+                                <b @click="logout" class="action-icon">&times;</b>
                             </div>
                             
                             <div v-for="score in userScores" class="scoreRow">
