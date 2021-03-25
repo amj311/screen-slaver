@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "commit all": "git add . && git commit -m $MSG && git push && git push cpanel"
   },
   "dependencies": {
     "body-parser": "^1.19.0",
