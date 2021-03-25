@@ -10,7 +10,7 @@ var game = new Vue ({
     el: '#game',
     
     data: {
-        apiUrl: deploy?.apiUrl || "https://amj311-screen-slaver.herokuapp.com",
+        apiUrl: "https://amj311-screen-slaver.herokuapp.com",
         gameName: "Screen Slaver",
         GAME_STATES: ["loading","login","menu","playing","lost","scores"],
         gameState: "loading",
