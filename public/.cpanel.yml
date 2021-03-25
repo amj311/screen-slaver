@@ -1,4 +1,0 @@
-deployment:
-  tasks:
-    - export DEPLOYPATH=/home/simplyol/public_html/
-    - /bin/cp -R * $DEPLOYPATH

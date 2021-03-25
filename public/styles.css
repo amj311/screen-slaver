@@ -242,8 +242,20 @@ div#scoreBoard > div {
     padding: 1em;
 }
 
-#scoreBoard .header {
+#scoreBoard .top {
+    display: flex;
+    align-items: center;
+    font-size: 1.5em;
+    margin: .5em;
+}
+
+#scoreBoard .top .header {
     text-align: center;
+    flex-grow: 1;
+}
+
+#scoreBoard .top b.action-icon {
+    padding-bottom: .2em;
 }
 
 .scoreRow {
