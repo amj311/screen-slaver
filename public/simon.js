@@ -1,8 +1,6 @@
 /* global Vue */
 /* global axios */
 
-console.log(deploy);
-
 var afterPlaySeq = function(){
     game.startUserTurn()
 }
