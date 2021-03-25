@@ -135,18 +135,8 @@ var game = new Vue ({
         
         playSimonSeq(done) {
             let playing = this.gameState === "playing";
-            if (playing && game.ctDwn > 0){
-                console.log(this.ctDwn, this.simonMessage)
-
-                game.simonMessage = game.ctDwn
-
-                console.log(this.ctDwn, this.simonMessage)
-                game.showSimonColor = false;
-                game.ctDwn--
-                setTimeout( game.playSimonSeq, game.simonSpeed )
-            }
             
-            else if (playing) {
+            if (playing) {
                 game.simonMessage = ""
                 
                 if(game.simonSeqIdx >= game.simonSeq.length){
