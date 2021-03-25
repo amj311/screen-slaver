@@ -46,7 +46,7 @@
                             <div class="top">
                                 <div class="header">Worldwide</div>
                                 <b onclick="document.getElementById('userscores').scrollIntoView({behavior: 'smooth', inline: 'end'})"
-                                    class="action-icon">&#9654;</b>
+                                    class="action-icon">&#9659;</b>
                             </div>
                             <div v-for="score in highScores" :class="{scoreRow: true, isUser: score.username && score.username === username}" :style="{color: uiColors.scores}">
                                 <div class="rank">{{score.rank}}</div>
@@ -69,7 +69,7 @@
                             
                             <div v-else class="top">
                                 <b onclick="document.getElementById('highscores').scrollIntoView({behavior: 'smooth', inline: 'start'})"
-                                    class="action-icon">&#9664;</b>
+                                    class="action-icon">&#9668;</b>
                                 <div class="header">Scores for {{username}}</div>
                                 <b @click="logout" id="logout" class="action-icon">&times;</b>
                             </div>
