@@ -34,7 +34,7 @@ var game = new Vue ({
         numColors: 6,
         simonSpeed: 1000,
         uiColors: {play: null, scores: null, submit: null, back: null},
-        allColors: ["dodgerblue","lime","blueviolet","gold","red","darkorange","magenta", "aqua"],
+        allColors: ["dodgerblue","lime","blueviolet","gold","red","darkorange","magenta"],
         screenBgURL: "images/static_fizzle.gif",
         bgURLS: {
             'static': "images/static_fizzle.gif",
