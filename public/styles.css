@@ -88,7 +88,7 @@ div#screen_text {
     height: 50%;
     opacity: .9;
     text-shadow: 0 0 5px #0008;
-    line-height: 1.4em;
+    line-height: 1.5;
     word-spacing: -.5em;
 }
 
@@ -258,6 +258,7 @@ div#scoreBoard > div {
 
 #scoreBoard .top b.action-icon {
     padding-bottom: .2em;
+    cursor: pointer;
 }
 
 .scoreRow {
@@ -285,19 +286,6 @@ div#scoreBoard > div {
     opacity: .7;
 }
 
-
-div#logout {
-    position: absolute;
-    top: 0;
-    right: 0;
-    padding: .25em;
-    font-size: 2em;
-    cursor: pointer;
-}
-
-div#logout::before {content: '\00d7';}
-
-
 .buttonContainer form {
     width: 100%;
     display: flex;
@@ -323,4 +311,10 @@ div#logout::before {content: '\00d7';}
 form input[disabled] {
     background-color: #aaa !important;
     cursor: not-allowed;
+}
+
+@media screen and (max-width: 400) {
+    body {
+        font-size: .8em;
+    }
 }

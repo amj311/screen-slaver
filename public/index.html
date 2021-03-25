@@ -69,7 +69,7 @@
                             <div v-else class="top">
                                 <b class="action-icon">&#9668;</b>
                                 <div class="header">Scores for {{username}}</div>
-                                <b @click="logout" class="action-icon">&times;</b>
+                                <b @click="logout" id="logout" class="action-icon">&times;</b>
                             </div>
                             
                             <div v-for="score in userScores" class="scoreRow">
