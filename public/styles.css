@@ -276,7 +276,6 @@ div#scoreBoard > div {
 }
 
 .rank {
-    min-width: 4rem;
     text-align: right;
     padding-right: 1em;
 }
