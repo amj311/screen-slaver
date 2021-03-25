@@ -46,7 +46,7 @@
                             <div class="top">
                                 <div class="header">Worldwide</div>
                                 <b onclick="document.getElementById('userscores').scrollIntoView({behavior: 'smooth', inline: 'end'})"
-                                    class="action-icon">&#9659;</b>
+                                    class="action-icon">&#9658;</b>
                             </div>
                             <div v-for="score in highScores" :class="{scoreRow: true, isUser: score.username && score.username === username}" :style="{color: uiColors.scores}">
                                 <div class="rank">{{score.rank}}</div>
