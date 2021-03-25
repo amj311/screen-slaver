@@ -92,6 +92,8 @@ var game = new Vue ({
             if (this.gameState === this.GAME_STATES[5]){
                 this.simonMessage = "High Scores";
                 this.screenBgURL = this.bgURLS.static;
+                this.getHighScores();
+                this.getUserScores();
             }
         }
     },
