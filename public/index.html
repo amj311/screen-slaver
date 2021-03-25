@@ -67,12 +67,9 @@
                                     <input type="text" v-model="nameQuery" placeholder="Username" />
                                     <input type="submit" value="Submit" :disabled="!nameIsGood" class="button inline" :style="{backgroundColor: uiColors.submit, color: uiColors.submit}" />
                                 </form>
-                                
                             </div>
                             
-                            <div v-else>
-                                
-                            <div class="top">
+                            <div v-else class="top">
                                 <b class="action-icon">▶</b>
                                 <div class="header">Scores for {{username}}</div>
                                 <b class="action-icon">&times;</b>
