@@ -175,6 +175,17 @@ div.menuView {
     user-select: none;
     text-shadow: 1px 1px 5px #0008;
 }
+
+.button.processing {
+    pointer-events: none;
+    color: transparent !important;
+    text-shadow: none;
+    background-image: url(images/loading.gif);
+    background-position: center;
+    background-size: 2em;
+    background-repeat: no-repeat;
+}
+
 .button.inline {
     width: auto;
 }

@@ -18,7 +18,11 @@ var game = new Vue ({
         username: '',
         nameQuery: '',
         currentScore: 0,
-        scoreInc: 25,
+        sendingscore: false,
+        scoreInc: 5,
+        buttonBonusTime: 500,
+        roundBonusValue: 25,
+        bonusTimerStart: null,
         userScores: [],
         highScores: [],
         maxScores: 25,
@@ -33,6 +37,7 @@ var game = new Vue ({
         showSimonColor: false,
         numColors: 6,
         simonSpeed: 1000,
+        timeoutTag: null,
         uiColors: {play: null, scores: null, submit: null, back: null},
         allColors: ["dodgerblue","lime","blueviolet","gold","red","darkorange","magenta"],
         screenBgURL: "images/static_fizzle.gif",
@@ -111,31 +116,44 @@ var game = new Vue ({
             this.gameState = this.GAME_STATES[2]
         },
         
+        tagTimeout(action, time) {
+            let tag = this.timeoutTag;
+            console.log("setting timeout with tag: ",tag)
+            setTimeout(()=> {
+                console.log("checing for tag", tag, game.timeoutTag, game.timeoutTag === tag)
+                if (game.timeoutTag === tag) action()
+            }, time);
+        },
+        newTimeoutTag() {
+            this.timeoutTag = Date.now();
+            console.log("set new tag: ", this.timeoutTag)
+        },
+
         startGame(){
             this.currentScore = 0;
             this.gameState = this.GAME_STATES[3]
             this.playerTurn = false;
             this.simonSeq = []
             this.round = 0;
-            
+            this.newTimeoutTag();
             this.startNextRound()
         },
         
         startNextRound() {
-            this.showSimonColor = false;
+            game.showSimonColor = false;
             game.playerTurn = false;
             game.round++
             game.simonMessage = "Round "+game.round;
-            setTimeout(function() { game.doSimonTurn() }, 2000);
+            game.tagTimeout(function() { game.doSimonTurn() }, 2000);
         },
 
         doSimonTurn(){
             this.playerTurn = false;
             this.simonSeq.push(this.randomFrom(this.playingColors))
-            this.playSimonSeq( this.startUserTurn )
+            this.playSimonSeq()
         },
         
-        playSimonSeq(done) {
+        playSimonSeq() {
             let playing = this.gameState === "playing";
             
             if (playing) {
@@ -149,7 +167,7 @@ var game = new Vue ({
                 }
                 game.swapSimonColor(game.allColors[game.simonSeq[game.simonSeqIdx]])
                 game.simonSeqIdx++
-                setTimeout( game.playSimonSeq, game.simonSpeed )
+                game.tagTimeout( game.playSimonSeq, game.simonSpeed )
             }
             
         },
@@ -158,7 +176,7 @@ var game = new Vue ({
             if(this.gameState === "playing"){
                 this.simonColor = "#000"
                 game.showSimonColor = true;
-                setTimeout( function(){ game.simonColor = colorString }, 50 )
+                game.tagTimeout( function(){ game.simonColor = colorString }, 50 )
             }
         },
         
@@ -166,10 +184,10 @@ var game = new Vue ({
             this.showSimonColor = false;
             this.playerTurn = true;
             this.userAttempt = [];
+            this.startBonusTimer();
         },
         
         onUserAttempt(colorIdx){
-            
             this.swapSimonColor(this.allColors[colorIdx])
             
             let atmptIdx = this.userAttempt.length;
@@ -180,23 +198,32 @@ var game = new Vue ({
             let isMatch = (this.userAttempt[atmptIdx] === this.simonSeq[atmptIdx]);
             
             if (isMatch) {
-                console.log('good job!')
+                this.currentScore += this.scoreInc;
                 
                 if (atmptIdx === this.simonSeq.length - 1) {
+                    if (this.didWinBonus()) this.currentScore += this.roundBonusValue;
                     this.simonMessage = "Good job!"
                     console.log('round complete')
-                    this.currentScore += this.scoreInc;
-                    setTimeout(function() { game.startNextRound()}, 2000);
+                    game.tagTimeout(function() { game.startNextRound()}, 2000);
                 }
             }
             else {
                 this.onLose()
             }
         },
+
+        startBonusTimer() {
+            this.bonusTimerStart = Date.now();
+        },
+        didWinBonus() {
+            let now = Date.now();
+            return now - this.bonusTimerStart <= this.simonSeq.length*this.buttonBonusTime;
+        },
         
         
         onLose(){
             console.log('GAME OVER!')
+            this.newTimeoutTag();
             this.playerTurn = false;
             this.gameState = this.GAME_STATES[4]
             if (this.currentScore > this.getPersonalBest()) {
@@ -209,6 +236,8 @@ var game = new Vue ({
         },
         
         async sendScore() {
+            if (this.sendingscore) return;
+            this.sendingscore = true;
             this.username = this.nameQuery;
             console.log('sending score')
             await axios.post(this.apiUrl+'/scores', {
@@ -216,6 +245,7 @@ var game = new Vue ({
                 score: game.currentScore
             })
             game.openScores()
+            this.sendingscore = false;
         },
 
         getPersonalBest() {

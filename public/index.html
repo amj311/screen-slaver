@@ -48,12 +48,12 @@
                                 <b onclick="document.getElementById('userscores').scrollIntoView({behavior: 'smooth', inline: 'end'})"
                                     class="action-icon">&#9658;</b>
                             </div>
-                            <div v-for="score in highScores" :class="{scoreRow: true, isUser: score.username && score.username === username}" :style="{color: uiColors.scores}">
+                            <li v-for="score in highScores" :class="{scoreRow: true, isUser: score.username && score.username === username}" :style="{color: uiColors.scores}">
                                 <div class="rank">{{score.rank}}</div>
                                 <div class="name">{{score.username || "no name"}}</div>
                                 <div class="spacer"></div>
                                 <div class="score">{{score.score}}</div>
-                            </div>
+                            </li>
                         </div>
                         
                         <div id="userscores">
@@ -74,12 +74,12 @@
                                 <b @click="logout" id="logout" class="action-icon">&times;</b>
                             </div>
                             
-                            <div v-for="score in userScores" class="scoreRow">
+                            <li v-for="score in userScores" class="scoreRow">
                                 <div class="rank">{{score.rank}}</div>
                                 <div class="name">{{score.username || "no name"}}</div>
                                 <div class="spacer"></div>
                                 <div class="score">{{score.score}}</div>
-                            </div>
+                            </li>
                             
                         </div>
                     </div>
@@ -95,10 +95,9 @@
                         <h2>Final Score:</h2>
                         <h1>{{currentScore}}</h1>
                         <div class="buttonContainer">
-                            
                             <form @submit.prevent="sendScore">
                                 <input type="text" v-model="nameQuery" placeholder="Username" />
-                                <input type="submit" value="Submit" :disabled="!nameIsGood" class="button" :style="{backgroundColor: uiColors.submit, color: uiColors.submit}" />
+                                <input type="submit" value="Submit" :disabled="!nameIsGood" class="button" :class="{processing: sendingscore}" :style="{backgroundColor: uiColors.submit, color: uiColors.submit}" />
                             </form>
                             
                             <div class="button" @click="startGame" :style="{backgroundColor: uiColors.play, color: uiColors.play}">
