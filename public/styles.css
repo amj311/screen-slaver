@@ -82,7 +82,7 @@ div#screen {
 
 .playing #screen.showColor {
     background-image: none !important;
-    box-shadow: inset 0 0 50em, inset 100vw 0 #ffffffaa;
+    box-shadow: inset 0 0 7em 5em, inset 57vw 0 #fffb;
 }
 
 div#screen_text {
