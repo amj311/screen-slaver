@@ -19,6 +19,7 @@ var game = new Vue ({
         nameQuery: '',
         currentScore: 0,
         sendingscore: false,
+        loadingscores: true,
         scoreInc: 5,
         buttonBonusTime: 500,
         roundBonusValue: 25,
@@ -97,8 +98,7 @@ var game = new Vue ({
             if (this.gameState === this.GAME_STATES[5]){
                 this.simonMessage = "High Scores";
                 this.screenBgURL = this.bgURLS.static;
-                this.getHighScores();
-                this.getUserScores();
+                this.loadScores();
             }
         }
     },
@@ -220,7 +220,6 @@ var game = new Vue ({
             return now - this.bonusTimerStart <= this.simonSeq.length*this.buttonBonusTime;
         },
         
-        
         onLose(){
             console.log('GAME OVER!')
             this.newTimeoutTag();
@@ -257,9 +256,16 @@ var game = new Vue ({
         
         openScores(){
             this.gameState = this.GAME_STATES[5];
-            this.getHighScores()
+            this.loadScores()
         },
         
+        async loadScores() {
+            this.loadingscores = true;
+            await this.getHighScores();
+            await this.getUserScores();
+            this.loadingscores = false;
+        },
+
         async getHighScores() {
             this.screenBgURL = this.bgURLS.error;
             let res = await axios.get(this.apiUrl+'/scores?max=' + this.maxScores)
@@ -270,6 +276,7 @@ var game = new Vue ({
         },
         
         async getUserScores(){
+            if (!this.nameQuery) return;
             this.username = this.nameQuery;
             let res = await axios.get(this.apiUrl+'/scores/' + this.username)
             this.userScores = res.data;

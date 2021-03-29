@@ -8,7 +8,7 @@
 </head>
 
 <body>
-    <div id="game" :class="gameState || 'loading'">
+    <div id="game" style="display:none;" :style="'display: block'" :class="gameState || 'loading'">
         <div>
             <div>
                 <div id="simon_space">
@@ -48,6 +48,9 @@
                                 <b onclick="document.getElementById('userscores').scrollIntoView({behavior: 'smooth', inline: 'end'})"
                                     class="action-icon">&#9658;</b>
                             </div>
+
+                            <div v-if="loadingscores" class="processing" style="width:100%; height: 3em;"></div>
+
                             <li v-for="score in highScores" :class="{scoreRow: true, isUser: score.username && score.username === username}" :style="{color: uiColors.scores}">
                                 <div class="rank">{{score.rank}}</div>
                                 <div class="name">{{score.username || "no name"}}</div>
@@ -61,26 +64,29 @@
                                 <br><br>
                                 <h2>Enter your username to see your scores!</h2>
                                 
-                                <form @submit.prevent="getHighScores">
+                                <form @submit.prevent="loadScores">
                                     <input type="text" v-model="nameQuery" placeholder="Username" />
                                     <input type="submit" value="Submit" :disabled="!nameIsGood" class="button inline" :style="{backgroundColor: uiColors.submit, color: uiColors.submit}" />
                                 </form>
                             </div>
                             
-                            <div v-else class="top">
-                                <b onclick="document.getElementById('highscores').scrollIntoView({behavior: 'smooth', inline: 'start'})"
-                                    class="action-icon">&#9668;</b>
-                                <div class="header">Scores for {{username}}</div>
-                                <b @click="logout" id="logout" class="action-icon">&times;</b>
-                            </div>
-                            
-                            <li v-for="score in userScores" class="scoreRow">
-                                <div class="rank">{{score.rank}}</div>
-                                <div class="name">{{score.username || "no name"}}</div>
-                                <div class="spacer"></div>
-                                <div class="score">{{score.score}}</div>
-                            </li>
-                            
+                            <div v-else>
+                                <div class="top">
+                                    <b onclick="document.getElementById('highscores').scrollIntoView({behavior: 'smooth', inline: 'start'})"
+                                        class="action-icon">&#9668;</b>
+                                    <div class="header">Scores for {{username}}</div>
+                                    <b @click="logout" id="logout" class="action-icon">&times;</b>
+                                </div>
+                                
+                                <div v-if="loadingscores" class="processing" style="width:100%; height: 3em;"></div>
+
+                                <li v-for="score in userScores" class="scoreRow">
+                                    <div class="rank">{{score.rank}}</div>
+                                    <div class="name">{{score.username || "no name"}}</div>
+                                    <div class="spacer"></div>
+                                    <div class="score">{{score.score}}</div>
+                                </li>
+                            </div>                            
                         </div>
                     </div>
                     

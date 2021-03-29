@@ -19,28 +19,33 @@
   background: #ddd;
 }
 
-
-
-
-
 body {
     margin: 0;
     font-family: 'Press Start 2P', monospace;
     color: #eee;
     line-height: 1.7;
+    background: #333;
 }
 
 #game {
     position: relative;
     height: 100vh;
     width: 100vw;
-    background: #333;
     overflow: hidden;
     user-select: none;
 }
 
 #game * {
     box-sizing: border-box;
+}
+
+
+.processing {
+    pointer-events: none;
+    background-image: url(images/loading.gif);
+    background-position: center;
+    background-size: 2em;
+    background-repeat: no-repeat;
 }
 
 div#simon_space {
@@ -177,13 +182,8 @@ div.menuView {
 }
 
 .button.processing {
-    pointer-events: none;
     color: transparent !important;
     text-shadow: none;
-    background-image: url(images/loading.gif);
-    background-position: center;
-    background-size: 2em;
-    background-repeat: no-repeat;
 }
 
 .button.inline {
