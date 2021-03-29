@@ -248,10 +248,10 @@ var game = new Vue ({
         },
 
         getPersonalBest() {
-            return localStorage.getItem("simon-best") || 0;
+            return window?.localStorage.getItem("simon-best") || 0;
         },
         savePersonalBest(score) {
-            if (score > this.getPersonalBest()) localStorage.setItem("simon-best", score);
+            if (score > this.getPersonalBest()) window?.localStorage.setItem("simon-best", score);
         },
         
         openScores(){
